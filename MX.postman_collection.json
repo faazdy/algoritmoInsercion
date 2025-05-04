@@ -1,0 +1,150 @@
+{
+	"info": {
+		"_postman_id": "9edad956-5f42-4ea3-815a-fa1477a82695",
+		"name": "MX",
+		"description": "Somos una empresa especializada en la gestión de sistemas de tiempo real, la administración del mercado de energía mayorista y el desarrollo de soluciones y servicios de energía e información.\n\nLa gestión de sistemas de ​tiempo real consiste en la planeación, diseño, optimización, puesta en servicio, coordinación de la operación, administración o gerenciamiento de sistemas transaccionales o plataformas tecnológicas, que involucran el intercambio de información con valor agregado, y mercados de bienes y servicios relacionados.  \n  \nEn XM contribuimos al desarrollo sostenible del país y brindamos la mejor energía a los colombianos. Para lograrlo, actuamos como un gran articulador, y lo hacemos sumando la energía de todos; no solo el tipo de energía que se genera, transporta o distribuye, sino la que emana de visiones, conocimientos, capacidades, experiencia y manera de entender el futuro. Así, los colombianos seguirán contando con la mejor energía.",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "43132793"
+	},
+	"item": [
+		{
+			"name": "Data",
+			"item": [
+				{
+					"name": "Hourly",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"MetricId\": \"ExpoMoneda\",\n    \"StartDate\": \"2025-02-01\",\n    \"EndDate\": \"2025-02-28\",\n    \"Entity\": \"Sistema\",\n    \"Filter\": []\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{URL}}/hourly",
+							"host": [
+								"{{URL}}"
+							],
+							"path": [
+								"hourly"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Daily",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"MetricId\": \"ENFICC\",\n    \"StartDate\": \"2025-02-01\",\n    \"EndDate\": \"2025-02-28\",\n    \"Entity\": \"Recurso\",\n    \"Filter\": []\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{URL}}/daily",
+							"host": [
+								"{{URL}}"
+							],
+							"path": [
+								"daily"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Monthly",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"MetricId\": \"MetricID\",\n    \"StartDate\": \"YYYY-MM-DD\",\n    \"EndDate\": \"YYYY-MM-DD\",\n    \"Entity\": \"Cruce\",\n    \"Filter\": [\n        \"Listado de codigos\"\n    ]\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{URL}}/monthly",
+							"host": [
+								"{{URL}}"
+							],
+							"path": [
+								"monthly"
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"description": "Servicios para obtener los datos."
+		},
+		{
+			"name": "Information",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"MetricId\": \"ListadoRecursos\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{URL}}/Lists",
+					"host": [
+						"{{URL}}"
+					],
+					"path": [
+						"Lists"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "URL",
+			"value": "https://servapibi.xm.com.co",
+			"type": "string"
+		}
+	]
+}
