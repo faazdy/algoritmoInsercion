@@ -42,6 +42,3 @@ npx ts-node insertdb.ts
 
 Este paso tomará los datos de la carpeta `data` y los insertará en la base de datos.
 
----
-
-Con estos pasos, el algoritmo debería ejecutarse correctamente y los datos se insertarán en la base de datos sin problemas. Si tienes alguna duda o problema, no dudes en abrir un *issue* en este repositorio.
