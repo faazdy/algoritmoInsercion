@@ -1,136 +1,150 @@
+import fs from 'fs';
+import path from 'path';
 import { Pool } from 'pg';
-import axios from 'axios';
 
 const pool = new Pool({
   user: 'postgres',
   host: 'localhost',
   database: 'masivasdb',
-  password: '', // cambiar la pass
+  password: '', //poner la contra de la db del docker
   port: 5432,
 });
 
-
-const API_URL = ''; //  URL endpoint que devuelve los datos en formato JSON
-
-async function insertarDatos() {
-  let data = [];
-  try {
-    const response = await axios.get(API_URL);
-    data = response.data;
-  } catch (error: any) {
-    console.error('❌ Error al obtener los datos desde la API:', error.message);
+async function insertarDesdeArchivo(tipo: 'daily' | 'monthly' | 'hourly' | 'list') {
+  const filePath = path.join(__dirname, 'data', `${tipo}.json`);
+  if (!fs.existsSync(filePath)) {
+    console.error(`❌ Archivo no encontrado: ${filePath}`);
     return;
   }
+
+  const data = JSON.parse(fs.readFileSync(filePath, 'utf-8'));
 
   for (const item of data) {
     const client = await pool.connect();
     try {
       await client.query('BEGIN');
 
-      // Tipo de agente
-      const tipoAgenteRes = await client.query(
-        'SELECT idtipo_agente FROM tipo_agente WHERE nombre = $1',
-        [item.tipo_agente]
-      );
-      let idtipo_agente = tipoAgenteRes.rows[0]?.idtipo_agente;
-      if (!idtipo_agente) {
-        const r = await client.query(
-          'INSERT INTO tipo_agente(nombre) VALUES($1) RETURNING idtipo_agente',
-          [item.tipo_agente]
-        );
-        idtipo_agente = r.rows[0].idtipo_agente;
-      }
+      if (tipo === 'hourly') {
+        // Reutilizamos tu lógica original para datos energéticos por hora
+        let idtipo_agente = (await getOrCreate(client,
+          'tipo_agente', 'nombre', item.tipo_agente, 'idtipo_agente')).id;
 
-      // Zona
-      const zonaRes = await client.query(
-        'SELECT idzona FROM zona WHERE nombre_zona = $1',
-        [item.zona]
-      );
-      let idzona = zonaRes.rows[0]?.idzona;
-      if (!idzona) {
-        const r = await client.query(
-          'INSERT INTO zona(nombre_zona) VALUES($1) RETURNING idzona',
-          [item.zona]
-        );
-        idzona = r.rows[0].idzona;
-      }
+        let idzona = (await getOrCreate(client,
+          'zona', 'nombre_zona', item.zona, 'idzona')).id;
 
-      // Agente
-      const agenteRes = await client.query(
-        'SELECT idagente FROM agente WHERE nombre = $1',
-        [item.nombre_agente]
-      );
-      let idagente = agenteRes.rows[0]?.idagente;
-      if (!idagente) {
-        const r = await client.query(
-          'INSERT INTO agente(nombre, idtipo_agente, idzona) VALUES($1, $2, $3) RETURNING idagente',
-          [item.nombre_agente, idtipo_agente, idzona]
-        );
-        idagente = r.rows[0].idagente;
-      }
+        let idagente = (await getOrCreate(client,
+          'agente', 'nombre', item.nombre_agente, 'idagente', [idtipo_agente, idzona],
+          'INSERT INTO agente(nombre, idtipo_agente, idzona) VALUES($1, $2, $3) RETURNING idagente')).id;
 
-      // Energía
-      const energiaRes = await client.query(
-        'SELECT idenergia FROM energia WHERE fecha = $1 AND hora = $2',
-        [item.fecha, item.hora]
-      );
-      let idenergia = energiaRes.rows[0]?.idenergia;
-      if (!idenergia) {
-        const r = await client.query(
-          `INSERT INTO energia(fecha, hora, precbolsnaci, costmargdesp, demareal, gene)
-           VALUES($1, $2, $3, $4, $5, $6) RETURNING idenergia`,
-          [item.fecha, item.hora, item.precbolsnaci, item.costmargdesp, item.demareal, item.gene]
+        const energiaRes = await client.query(
+          'SELECT idenergia FROM energia WHERE fecha = $1 AND hora = $2',
+          [item.fecha, item.hora]
         );
-        idenergia = r.rows[0].idenergia;
-      }
+        let idenergia = energiaRes.rows[0]?.idenergia;
+        if (!idenergia) {
+          const r = await client.query(
+            `INSERT INTO energia(fecha, hora, precbolsnaci, costmargdesp, demareal, gene)
+             VALUES($1, $2, $3, $4, $5, $6) RETURNING idenergia`,
+            [item.fecha, item.hora, item.precbolsnaci, item.costmargdesp, item.demareal, item.gene]
+          );
+          idenergia = r.rows[0].idenergia;
+        }
 
-      // Transacción
-      const transRes = await client.query(
-        'SELECT idtransaccion FROM transaccion WHERE idagente = $1 AND idenergia = $2 AND fecha = $3',
-        [idagente, idenergia, item.fecha]
-      );
-      let idtransaccion = transRes.rows[0]?.idtransaccion;
-      if (!idtransaccion) {
-        const r = await client.query(
-          `INSERT INTO transaccion(idagente, idenergia, fecha, ventbolsnaciener, compbolsnaciener, demarealener, geneener)
-           VALUES($1, $2, $3, $4, $5, $6, $7) RETURNING idtransaccion`,
-          [
-            idagente,
-            idenergia,
-            item.fecha,
-            item.ventbolsnaciener,
-            item.compbolsnaciener,
-            item.demarealener,
-            item.geneener
-          ]
+        const transRes = await client.query(
+          'SELECT idtransaccion FROM transaccion WHERE idagente = $1 AND idenergia = $2 AND fecha = $3',
+          [idagente, idenergia, item.fecha]
         );
-        idtransaccion = r.rows[0].idtransaccion;
-      }
+        let idtransaccion = transRes.rows[0]?.idtransaccion;
+        if (!idtransaccion) {
+          const r = await client.query(
+            `INSERT INTO transaccion(idagente, idenergia, fecha, ventbolsnaciener, compbolsnaciener, demarealener, geneener)
+             VALUES($1, $2, $3, $4, $5, $6, $7) RETURNING idtransaccion`,
+            [
+              idagente,
+              idenergia,
+              item.fecha,
+              item.ventbolsnaciener,
+              item.compbolsnaciener,
+              item.demarealener,
+              item.geneener
+            ]
+          );
+          idtransaccion = r.rows[0].idtransaccion;
+        }
 
-      // Resultado financiero
-      const resultRes = await client.query(
-        'SELECT 1 FROM resultados_financieros WHERE idtransaccion = $1',
-        [idtransaccion]
-      );
-      if (resultRes.rowCount === 0) {
+        const resultRes = await client.query(
+          'SELECT 1 FROM resultados_financieros WHERE idtransaccion = $1',
+          [idtransaccion]
+        );
+        if (resultRes.rowCount === 0) {
+          await client.query(
+            `INSERT INTO resultados_financieros(idtransaccion, monto_ingreso, monto_costo)
+             VALUES($1, $2, $3)`,
+            [idtransaccion, item.ventbolsnaciener, item.compbolsnaciener]
+          );
+        }
+
+      } else if (tipo === 'daily') {
         await client.query(
-          `INSERT INTO resultados_financieros(idtransaccion, monto_ingreso, monto_costo)
-           VALUES($1, $2, $3)`,
-          [idtransaccion, item.ventbolsnaciener, item.compbolsnaciener]
+          `INSERT INTO energia_diaria(fecha, variable, valor, unidad)
+           VALUES ($1, $2, $3, $4)`,
+          [item.fecha, item.variable, item.valor, item.unidad]
+        );
+
+      } else if (tipo === 'monthly') {
+        await client.query(
+          `INSERT INTO energia_mensual(fecha, variable, valor, unidad)
+           VALUES ($1, $2, $3, $4)`,
+          [item.fecha, item.variable, item.valor, item.unidad]
+        );
+
+      } else if (tipo === 'list') {
+        await client.query(
+          `INSERT INTO listado_config(variable, descripcion, unidad)
+           VALUES ($1, $2, $3)`,
+          [item.variable, item.descripcion, item.unidad]
         );
       }
 
       await client.query('COMMIT');
-      console.log(`✔ Insertado: ${item.nombre_agente} - ${item.fecha}`);
+      console.log(`✔ Insertado (${tipo}): ${item.variable ?? item.nombre_agente} - ${item.fecha ?? ''}`);
     } catch (e: any) {
       await client.query('ROLLBACK');
-      console.error('✖ Error en transacción:', e.message);
+      console.error(`✖ Error al insertar (${tipo}):`, e.message);
     } finally {
       client.release();
     }
   }
+}
+
+async function getOrCreate(
+  client: any,
+  table: string,
+  field: string,
+  value: string,
+  idField: string,
+  extraValues: any[] = [],
+  insertQuery?: string
+) {
+  const res = await client.query(`SELECT ${idField} as id FROM ${table} WHERE ${field} = $1`, [value]);
+  if (res.rows.length > 0) return res.rows[0];
+
+  if (!insertQuery) {
+    const r = await client.query(`INSERT INTO ${table}(${field}) VALUES($1) RETURNING ${idField} as id`, [value]);
+    return r.rows[0];
+  } else {
+    const r = await client.query(insertQuery, [value, ...extraValues]);
+    return r.rows[0];
+  }
+}
+
+async function main() {
+  await insertarDesdeArchivo('daily');
+  await insertarDesdeArchivo('monthly');
+  await insertarDesdeArchivo('hourly');
+  await insertarDesdeArchivo('list');
 
   await pool.end();
 }
 
-insertarDatos();
+main();

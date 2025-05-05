@@ -31,10 +31,10 @@ async function run() {
   });
 
   await fetchAndSave('monthly', 'monthly', {
-    MetricId: 'MetricID',
-    StartDate: '2025-02-01',
-    EndDate: '2025-02-28',
-    Entity: 'Cruce',
+    MetricId: 'FAER',
+    StartDate: '2023-01-01',
+    EndDate: '2024-01-21',
+    Entity: 'Sistema',
     Filter: [] 
   });
 
