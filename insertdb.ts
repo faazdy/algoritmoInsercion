@@ -25,7 +25,7 @@ async function insertarDesdeArchivo(tipo: 'daily' | 'monthly' | 'hourly' | 'list
       await client.query('BEGIN');
 
       if (tipo === 'hourly') {
-        // Reutilizamos tu lógica original para datos energéticos por hora
+        
         let idtipo_agente = (await getOrCreate(client,
           'tipo_agente', 'nombre', item.tipo_agente, 'idtipo_agente')).id;
 
