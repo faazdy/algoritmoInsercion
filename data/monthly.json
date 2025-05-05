@@ -1,127 +1,138 @@
-{
-  "Metric": {
-    "Id": "FAER",
-    "Name": "FAER Moneda por Sistema",
-    "StartDate": "2023-01-01T00:00:00",
-    "EndDate": "2024-01-21T00:00:00"
-  },
-  "Items": [
-    {
-      "Date": "2023-01-01",
-      "MonthlyEntities": [
-        {
-          "Id": "Sistema",
-          "Value": "18901628756.00000"
-        }
-      ]
+[
+  {
+    "Metric": {
+      "Id": "FAER",
+      "Name": "FAER Moneda por Sistema",
+      "StartDate": "2023-01-01T00:00:00",
+      "EndDate": "2024-02-28T00:00:00"
     },
-    {
-      "Date": "2023-02-01",
-      "MonthlyEntities": [
-        {
-          "Id": "Sistema",
-          "Value": "17533442701.00000"
-        }
-      ]
-    },
-    {
-      "Date": "2023-03-01",
-      "MonthlyEntities": [
-        {
-          "Id": "Sistema",
-          "Value": "18592078104.00000"
-        }
-      ]
-    },
-    {
-      "Date": "2023-04-01",
-      "MonthlyEntities": [
-        {
-          "Id": "Sistema",
-          "Value": "17847161898.00000"
-        }
-      ]
-    },
-    {
-      "Date": "2023-05-01",
-      "MonthlyEntities": [
-        {
-          "Id": "Sistema",
-          "Value": "18754656657.00000"
-        }
-      ]
-    },
-    {
-      "Date": "2023-06-01",
-      "MonthlyEntities": [
-        {
-          "Id": "Sistema",
-          "Value": "18006840563.00000"
-        }
-      ]
-    },
-    {
-      "Date": "2023-07-01",
-      "MonthlyEntities": [
-        {
-          "Id": "Sistema",
-          "Value": "18337532820.00000"
-        }
-      ]
-    },
-    {
-      "Date": "2023-08-01",
-      "MonthlyEntities": [
-        {
-          "Id": "Sistema",
-          "Value": "19444565896.00000"
-        }
-      ]
-    },
-    {
-      "Date": "2023-09-01",
-      "MonthlyEntities": [
-        {
-          "Id": "Sistema",
-          "Value": "19796023195.00000"
-        }
-      ]
-    },
-    {
-      "Date": "2023-10-01",
-      "MonthlyEntities": [
-        {
-          "Id": "Sistema",
-          "Value": "19041066109.00000"
-        }
-      ]
-    },
-    {
-      "Date": "2023-11-01",
-      "MonthlyEntities": [
-        {
-          "Id": "Sistema",
-          "Value": "18899016860.00000"
-        }
-      ]
-    },
-    {
-      "Date": "2023-12-01",
-      "MonthlyEntities": [
-        {
-          "Id": "Sistema",
-          "Value": "18863312411.00000"
-        }
-      ]
-    },
-    {
-      "Date": "2024-01-01",
-      "MonthlyEntities": [
-        {
-          "Id": "Sistema",
-          "Value": "19219057036.00000"
-        }
-      ]
-    }
-  ]
-}
+    "Items": [
+      {
+        "Date": "2023-01-01",
+        "MonthlyEntities": [
+          {
+            "Id": "Sistema",
+            "Value": "18901628756.00000"
+          }
+        ]
+      },
+      {
+        "Date": "2023-02-01",
+        "MonthlyEntities": [
+          {
+            "Id": "Sistema",
+            "Value": "17533442701.00000"
+          }
+        ]
+      },
+      {
+        "Date": "2023-03-01",
+        "MonthlyEntities": [
+          {
+            "Id": "Sistema",
+            "Value": "18592078104.00000"
+          }
+        ]
+      },
+      {
+        "Date": "2023-04-01",
+        "MonthlyEntities": [
+          {
+            "Id": "Sistema",
+            "Value": "17847161898.00000"
+          }
+        ]
+      },
+      {
+        "Date": "2023-05-01",
+        "MonthlyEntities": [
+          {
+            "Id": "Sistema",
+            "Value": "18754656657.00000"
+          }
+        ]
+      },
+      {
+        "Date": "2023-06-01",
+        "MonthlyEntities": [
+          {
+            "Id": "Sistema",
+            "Value": "18006840563.00000"
+          }
+        ]
+      },
+      {
+        "Date": "2023-07-01",
+        "MonthlyEntities": [
+          {
+            "Id": "Sistema",
+            "Value": "18337532820.00000"
+          }
+        ]
+      },
+      {
+        "Date": "2023-08-01",
+        "MonthlyEntities": [
+          {
+            "Id": "Sistema",
+            "Value": "19444565896.00000"
+          }
+        ]
+      },
+      {
+        "Date": "2023-09-01",
+        "MonthlyEntities": [
+          {
+            "Id": "Sistema",
+            "Value": "19796023195.00000"
+          }
+        ]
+      },
+      {
+        "Date": "2023-10-01",
+        "MonthlyEntities": [
+          {
+            "Id": "Sistema",
+            "Value": "19041066109.00000"
+          }
+        ]
+      },
+      {
+        "Date": "2023-11-01",
+        "MonthlyEntities": [
+          {
+            "Id": "Sistema",
+            "Value": "18899016860.00000"
+          }
+        ]
+      },
+      {
+        "Date": "2023-12-01",
+        "MonthlyEntities": [
+          {
+            "Id": "Sistema",
+            "Value": "18863312411.00000"
+          }
+        ]
+      },
+      {
+        "Date": "2024-01-01",
+        "MonthlyEntities": [
+          {
+            "Id": "Sistema",
+            "Value": "19219057036.00000"
+          }
+        ]
+      },
+      {
+        "Date": "2024-02-01",
+        "MonthlyEntities": [
+          {
+            "Id": "Sistema",
+            "Value": "17866477601.00000"
+          }
+        ]
+      }
+    ]
+  }
+]
